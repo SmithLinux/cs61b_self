@@ -20,7 +20,7 @@ public class Arithmetic {
      * @return Sum of a and b
      * */
     public static int sum(int a, int b) {
-        return a * b;
+        return a + b;
     }
 
     public static void main(String[] args) {
@@ -28,7 +28,6 @@ public class Arithmetic {
         int num1 = StdIn.readInt();
         System.out.println("Give me another number! (still no decimals)");
         int num2 = StdIn.readInt();
-
         System.out.println("The product of " + num1 + " and " + num2 + " is: " + product(num1, num2));
         System.out.println("The sum of " + num1 + " and " + num2 + " is: " + sum(num1, num2));
     }
