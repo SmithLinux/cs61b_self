@@ -30,9 +30,16 @@ public class ListExercisesTest {
         List<Integer> lst = List.of(1, 2, 3, 4, 5, 6);
         List<Integer> lstExpected = List.of(2, 4, 6);
 
+        List<Integer> lst2 = List.of(2,3,4,5,6,7);
+        List<Integer> lstOfNull = List.of(1,3,5,7);
+
         List<Integer> res = ListExercises.evens(lst);
+        List<Integer> res2 = ListExercises.evens(lst2);
+        List<Integer> resNull = ListExercises.evens(lstOfNull);
 
         assertThat(res).isEqualTo(lstExpected);
+        assertThat(res2).isEqualTo(lstExpected);
+        assertThat(resNull).isEqualTo(null);
     }
 
     @Test
