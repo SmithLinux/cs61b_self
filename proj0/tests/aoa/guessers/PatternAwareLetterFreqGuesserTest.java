@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.Map;
 
 import static com.google.common.truth.Truth.assertThat;
 
@@ -28,6 +29,7 @@ public class PatternAwareLetterFreqGuesserTest {
         guess = palfg.getGuess("----", List.of('l', 'o', 'x', 'a', 'e'));
         assertThat(guess).isEqualTo('b');
     }
+
 
     @Order(2)
     @DisplayName("PatternAwareLetterFreqGuesser returns correct guesses for -o-- pattern")
