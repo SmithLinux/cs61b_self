@@ -23,7 +23,7 @@ public class PAGALetterFreqGuesser implements Guesser {
         List<String> lmw = getLengthMatchesWords(pattern);
         List<String> pmw = getPatternMatchesWords(pattern, lmw);
         List<String> possibleMatchesWords = getPossibleMatchesWords(pattern, pmw, guesses);
-        Map<Character, Integer> freqMap = getFrequencyMap(possibleMatchesWords);
+        Map<Character, Integer> freqMap = getFrequencyMap(possibleMatchesWords, guesses);
         int biggestNum = -1;
         char biggestChar = '?';
         for (Map.Entry<Character, Integer> entry : freqMap.entrySet()) {
@@ -35,13 +35,23 @@ public class PAGALetterFreqGuesser implements Guesser {
         return biggestChar;
     }
 
-    public Map<Character, Integer> getFrequencyMap(List<String> pmw) {
+    public Map<Character, Integer> getFrequencyMap(List<String> pmw, List<Character> guesses) {
         // TODO: Fill in this method.
         Map<Character, Integer> frequency = new TreeMap<>();
+        boolean isContain = false;
+
         for (String word : pmw) {
             for (int i = 0; i < word.length(); i++) {
                 if(!frequency.containsKey(word.charAt(i))) {
-                    frequency.put(word.charAt(i), 1);
+                    for (char c : guesses) {
+                        if (word.charAt(i) == c) {
+                            isContain = true;
+                        }
+                    }
+                    if (!isContain) {
+                        frequency.put(word.charAt(i), 1);
+                    }
+                    isContain = false;
                 }else {
                     frequency.put(word.charAt(i), frequency.get(word.charAt(i)) + 1);
                 }
@@ -64,21 +74,20 @@ public class PAGALetterFreqGuesser implements Guesser {
      * Return the words which is possible matches.
      */
     public List<String> getPossibleMatchesWords(String pattern, List<String> patternMatchesWords, List<Character> guesses) {
-        boolean isContain = false;
-        List<String> possibleMatchesWords = new ArrayList<>();
+        List<String> pmw = new ArrayList<>(patternMatchesWords);
         for (String word : patternMatchesWords) {
-            for (char c : guesses) {
-                if (word.contains(String.valueOf(c))) {
-                    isContain = true;
+            for (int i = 0; i < word.length(); i++) {
+                if(pattern.charAt(i) == '-') {
+                    for (char c : guesses) {
+                        if (word.charAt(i) == c) {
+                            pmw.remove(word);
+                        }
+                    }
                 }
             }
-            if (!isContain) {
-                possibleMatchesWords.add(word);
-            }
-            isContain = false;
         }
 
-        return possibleMatchesWords;
+        return pmw;
     }
 
     /**
@@ -103,10 +112,12 @@ public class PAGALetterFreqGuesser implements Guesser {
         List<String> lmw2 = pagalfg.getPatternMatchesWords("-e--", lmw);
         System.out.println(lmw);
         System.out.println(lmw2);
-        List<String> pmw = pagalfg.getPossibleMatchesWords(lmw, List.of('e'));
+        List<String> pmw = pagalfg.getPossibleMatchesWords("-e--",lmw, List.of('e'));
         System.out.println(pmw);
         System.out.println(pagalfg.getGuess("----", List.of('e')));
 
+
+        System.out.println("-------------------");
         PAGALetterFreqGuesser palfg = new PAGALetterFreqGuesser("data/sorted_scrabble.txt");
         System.out.println(palfg.getGuess("be-", List.of('e')));
     }
