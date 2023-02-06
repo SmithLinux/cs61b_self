@@ -105,24 +105,24 @@ public class PatternAwareLetterFreqGuesser implements Guesser {
     }
 
     public static void main(String[] args) {
-        PatternAwareLetterFreqGuesser palfg = new PatternAwareLetterFreqGuesser("data/example.txt");
-        PatternAwareLetterFreqGuesser palfg2 = new PatternAwareLetterFreqGuesser("data/sorted_scrabble.txt");
-
-        System.out.println(palfg.getGuess("-e--", List.of('e')));
-        Map<Character, Integer> lt = palfg.getFreqMapThatMatchesPattern("-e--");
-        Map<Character, Integer> lt2 = palfg.getFreqMapThatMatchesPattern("----");
-        List<String> mw = palfg.getTheLengthMatchedWords("-e--");
-        List<String> pmw = palfg.getThePatternMatchesWords(mw,"-e--");
-
-        List<String> mw2 = palfg2.getTheLengthMatchedWords("-e-a");
-        List<String> pmw2 = palfg2.getThePatternMatchesWords(mw2,"-e-a");
-        System.out.println(lt);
-        System.out.println(lt2);
-        System.out.println(mw);
-        System.out.println(pmw);
-        System.out.println("--------------------------------");
-        System.out.println(mw2);
-        System.out.println(pmw2);
+//        PatternAwareLetterFreqGuesser palfg = new PatternAwareLetterFreqGuesser("data/example.txt");
+//        PatternAwareLetterFreqGuesser palfg2 = new PatternAwareLetterFreqGuesser("data/sorted_scrabble.txt");
+//
+//        System.out.println(palfg.getGuess("-e--", List.of('e')));
+//        Map<Character, Integer> lt = palfg.getFreqMapThatMatchesPattern("-e--");
+//        Map<Character, Integer> lt2 = palfg.getFreqMapThatMatchesPattern("----");
+//        List<String> mw = palfg.getTheLengthMatchedWords("-e--");
+//        List<String> pmw = palfg.getThePatternMatchesWords(mw,"-e--");
+//
+//        List<String> mw2 = palfg2.getTheLengthMatchedWords("-e-a");
+//        List<String> pmw2 = palfg2.getThePatternMatchesWords(mw2,"-e-a");
+//        System.out.println(lt);
+//        System.out.println(lt2);
+//        System.out.println(mw);
+//        System.out.println(pmw);
+//        System.out.println("--------------------------------");
+//        System.out.println(mw2);
+//        System.out.println(pmw2);
 
     }
 }
