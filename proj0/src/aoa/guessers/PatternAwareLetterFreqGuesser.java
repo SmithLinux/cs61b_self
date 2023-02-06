@@ -2,6 +2,7 @@ package aoa.guessers;
 
 import aoa.utils.FileUtils;
 import edu.princeton.cs.algs4.In;
+import org.checkerframework.checker.units.qual.A;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,8 +60,9 @@ public class PatternAwareLetterFreqGuesser implements Guesser {
      */
     public Map<Character, Integer> getFreqMapThatMatchesPattern(String pattern) {
         Map<Character, Integer> letters = new TreeMap<>();
-        List<String> matchedWords = getTheMatchedWords(pattern);
-        for(String word : matchedWords) {
+        List<String> matchedWords = getTheLengthMatchedWords(pattern);
+        List<String> patternMatchesWords = getThePatternMatchesWords(matchedWords, pattern);
+        for(String word : patternMatchesWords) {
             for (int i = 0; i < word.length(); i++) {
                 if (!letters.containsKey(word.charAt(i))) {
                     letters.put(word.charAt(i), 1);
@@ -75,48 +77,31 @@ public class PatternAwareLetterFreqGuesser implements Guesser {
     /**
      * Return the list of words which matched the pattern.
      */
+    public List<String> getThePatternMatchesWords(List<String> lengthMatchesWords, String pattern) {
+        List<String> patternMatchesWords = new ArrayList<>(lengthMatchesWords);
 
-    /**
-     * Return the words which match the pattern
-     */
-    public List<String> getTheMatchedWords(String pattern) {
-        List<String> sameLengthWords = new ArrayList<>();
-        List<String> matchedWords = new ArrayList<>();
-        boolean isMatch = false;
-        int count = 0;
-        for (int i = 0; i < pattern.length(); i++) {
-            if (pattern.charAt(i) == '-') {
-                count ++;
+        for (String word : lengthMatchesWords) {
+            for (int i = 0; i < word.length(); i++) {
+                if (pattern.charAt(i) != '-' && word.charAt(i) != pattern.charAt(i)) {
+                    patternMatchesWords.remove(word);
+                }
             }
         }
+        return patternMatchesWords;
+    }
 
+    /**
+     * Return the words which match the length of the pattern.
+     */
+    public List<String> getTheLengthMatchedWords(String pattern) {
+        List<String> sameLengthWords = new ArrayList<>();
 
         for(String word : words) {
             if (word.length() == pattern.length()) {
                 sameLengthWords.add(word);
             }
         }
-        if (count == pattern.length()) {
-            return sameLengthWords;
-        }
-
-        for(String word : sameLengthWords) {
-            for(int i = 0; i < word.length(); i ++) {
-                if(pattern.charAt(i) != '-' && pattern.charAt(i) == word.charAt(i)) {
-                    isMatch = true;
-                }else if(pattern.charAt(i) == '-' && isMatch) {
-                    isMatch = true;
-                }
-                else {
-                    isMatch = false;
-                }
-            }
-            if (isMatch) {
-                matchedWords.add(word);
-                isMatch = false;
-            }
-        }
-        return matchedWords;
+        return sameLengthWords;
     }
 
     public static void main(String[] args) {
@@ -126,11 +111,18 @@ public class PatternAwareLetterFreqGuesser implements Guesser {
         System.out.println(palfg.getGuess("-e--", List.of('e')));
         Map<Character, Integer> lt = palfg.getFreqMapThatMatchesPattern("-e--");
         Map<Character, Integer> lt2 = palfg.getFreqMapThatMatchesPattern("----");
-        List<String> mw = palfg.getTheMatchedWords("-e--");
-        List<String> mw2 = palfg2.getTheMatchedWords("-e-a");
+        List<String> mw = palfg.getTheLengthMatchedWords("-e--");
+        List<String> pmw = palfg.getThePatternMatchesWords(mw,"-e--");
+
+        List<String> mw2 = palfg2.getTheLengthMatchedWords("-e-a");
+        List<String> pmw2 = palfg2.getThePatternMatchesWords(mw2,"-e-a");
         System.out.println(lt);
         System.out.println(lt2);
         System.out.println(mw);
+        System.out.println(pmw);
+        System.out.println("--------------------------------");
         System.out.println(mw2);
+        System.out.println(pmw2);
+
     }
 }
