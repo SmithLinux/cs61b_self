@@ -3,9 +3,13 @@ package aoa.guessers;
 import aoa.utils.FileUtils;
 import edu.princeton.cs.algs4.In;
 <<<<<<< HEAD
+<<<<<<< HEAD
 import org.checkerframework.checker.units.qual.A;
 =======
 >>>>>>> 0085b4b (proj0: fig the bug of PatternAweraLetterFreqGuesser.java)
+=======
+import org.checkerframework.checker.units.qual.A;
+>>>>>>> 0d5c9e8 (proj0: completed PatternAwareLetterFreqGuesser)
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,6 +68,7 @@ public class PatternAwareLetterFreqGuesser implements Guesser {
     public Map<Character, Integer> getFreqMapThatMatchesPattern(String pattern) {
         Map<Character, Integer> letters = new TreeMap<>();
 <<<<<<< HEAD
+<<<<<<< HEAD
         List<String> matchedWords = getTheLengthMatchedWords(pattern);
         List<String> patternMatchesWords = getThePatternMatchesWords(matchedWords, pattern);
         for(String word : patternMatchesWords) {
@@ -71,6 +76,11 @@ public class PatternAwareLetterFreqGuesser implements Guesser {
         List<String> matchedWords = getTheMatchedWords(pattern);
         for(String word : matchedWords) {
 >>>>>>> 0085b4b (proj0: fig the bug of PatternAweraLetterFreqGuesser.java)
+=======
+        List<String> matchedWords = getTheLengthMatchedWords(pattern);
+        List<String> patternMatchesWords = getThePatternMatchesWords(matchedWords, pattern);
+        for(String word : patternMatchesWords) {
+>>>>>>> 0d5c9e8 (proj0: completed PatternAwareLetterFreqGuesser)
             for (int i = 0; i < word.length(); i++) {
                 if (!letters.containsKey(word.charAt(i))) {
                     letters.put(word.charAt(i), 1);
@@ -85,6 +95,7 @@ public class PatternAwareLetterFreqGuesser implements Guesser {
     /**
      * Return the list of words which matched the pattern.
      */
+<<<<<<< HEAD
 <<<<<<< HEAD
     public List<String> getThePatternMatchesWords(List<String> lengthMatchesWords, String pattern) {
         List<String> patternMatchesWords = new ArrayList<>(lengthMatchesWords);
@@ -105,28 +116,37 @@ public class PatternAwareLetterFreqGuesser implements Guesser {
     public List<String> getTheLengthMatchedWords(String pattern) {
         List<String> sameLengthWords = new ArrayList<>();
 =======
+=======
+    public List<String> getThePatternMatchesWords(List<String> lengthMatchesWords, String pattern) {
+        List<String> patternMatchesWords = new ArrayList<>(lengthMatchesWords);
+>>>>>>> 0d5c9e8 (proj0: completed PatternAwareLetterFreqGuesser)
 
-    /**
-     * Return the words which match the pattern
-     */
-    public List<String> getTheMatchedWords(String pattern) {
-        List<String> sameLengthWords = new ArrayList<>();
-        List<String> matchedWords = new ArrayList<>();
-        boolean isMatch = false;
-        int count = 0;
-        for (int i = 0; i < pattern.length(); i++) {
-            if (pattern.charAt(i) == '-') {
-                count ++;
+        for (String word : lengthMatchesWords) {
+            for (int i = 0; i < word.length(); i++) {
+                if (pattern.charAt(i) != '-' && word.charAt(i) != pattern.charAt(i)) {
+                    patternMatchesWords.remove(word);
+                }
             }
         }
+        return patternMatchesWords;
+    }
 
+<<<<<<< HEAD
 >>>>>>> 0085b4b (proj0: fig the bug of PatternAweraLetterFreqGuesser.java)
+=======
+    /**
+     * Return the words which match the length of the pattern.
+     */
+    public List<String> getTheLengthMatchedWords(String pattern) {
+        List<String> sameLengthWords = new ArrayList<>();
+>>>>>>> 0d5c9e8 (proj0: completed PatternAwareLetterFreqGuesser)
 
         for(String word : words) {
             if (word.length() == pattern.length()) {
                 sameLengthWords.add(word);
             }
         }
+<<<<<<< HEAD
 <<<<<<< HEAD
         return sameLengthWords;
     }
@@ -173,6 +193,9 @@ public class PatternAwareLetterFreqGuesser implements Guesser {
             }
         }
         return matchedWords;
+=======
+        return sameLengthWords;
+>>>>>>> 0d5c9e8 (proj0: completed PatternAwareLetterFreqGuesser)
     }
 
     public static void main(String[] args) {
@@ -182,12 +205,22 @@ public class PatternAwareLetterFreqGuesser implements Guesser {
         System.out.println(palfg.getGuess("-e--", List.of('e')));
         Map<Character, Integer> lt = palfg.getFreqMapThatMatchesPattern("-e--");
         Map<Character, Integer> lt2 = palfg.getFreqMapThatMatchesPattern("----");
-        List<String> mw = palfg.getTheMatchedWords("-e--");
-        List<String> mw2 = palfg2.getTheMatchedWords("-e-a");
+        List<String> mw = palfg.getTheLengthMatchedWords("-e--");
+        List<String> pmw = palfg.getThePatternMatchesWords(mw,"-e--");
+
+        List<String> mw2 = palfg2.getTheLengthMatchedWords("-e-a");
+        List<String> pmw2 = palfg2.getThePatternMatchesWords(mw2,"-e-a");
         System.out.println(lt);
         System.out.println(lt2);
         System.out.println(mw);
+        System.out.println(pmw);
+        System.out.println("--------------------------------");
         System.out.println(mw2);
+<<<<<<< HEAD
 >>>>>>> 0085b4b (proj0: fig the bug of PatternAweraLetterFreqGuesser.java)
+=======
+        System.out.println(pmw2);
+
+>>>>>>> 0d5c9e8 (proj0: completed PatternAwareLetterFreqGuesser)
     }
 }
