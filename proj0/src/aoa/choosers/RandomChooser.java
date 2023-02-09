@@ -14,23 +14,6 @@ public class RandomChooser implements Chooser {
     public RandomChooser(int wordLength, String dictionaryFile) {
         // TODO: Fill in/change this constructor.
         if (wordLength < 1) throw new IllegalArgumentException();
-//        List<String> words = FileUtils.readWords(dictionaryFile);
-//
-//        int numWords = words.size();
-//        int randomlyChosenNumber = StdRandom.uniform(numWords);
-//        String randomlyChosenWord = words.remove(randomlyChosenNumber);
-//        int chosenWordLength = randomlyChosenWord.length();
-//
-//        while (chosenWordLength != wordLength) {
-//            randomlyChosenNumber = StdRandom.uniform(numWords);
-//            randomlyChosenWord = words.remove(randomlyChosenNumber);
-//            chosenWordLength = randomlyChosenWord.length();
-//            if (words.size() == EMPTY) {
-//                throw new IllegalStateException();
-//            }
-//            numWords = words.size();
-//        }
-//        chosenWord = randomlyChosenWord;
         pattern = "-";
 
         List<String> words = FileUtils.readWordsOfLength(dictionaryFile, wordLength);
