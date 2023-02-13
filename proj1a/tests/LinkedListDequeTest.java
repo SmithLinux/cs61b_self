@@ -3,6 +3,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.google.common.truth.Truth.assertThat;
@@ -71,4 +72,109 @@ public class LinkedListDequeTest {
      }
 
      //Below, you'll write your own tests for LinkedListDeque.
+
+    @Test
+    public void instanceTest() {
+         Deque<Integer> lld1 = new LinkedListDeque<>();
+         List<Integer> expected = new ArrayList<>();
+
+         assertThat(lld1.toList().equals(expected));
+         assertThat(lld1.toList()).containsExactly().inOrder();
+    }
+
+    @Test
+    public void isEmptyTest() {
+         Deque<String> lld1 = new LinkedListDeque<>();
+
+         assertThat(lld1.isEmpty()).isEqualTo(lld1.toList().isEmpty());
+         lld1.addLast("Scream");
+         assertThat(lld1.isEmpty()).isEqualTo(lld1.toList().isEmpty());
+    }
+
+    @Test
+    public void sizeTest() {
+         Deque<Integer> lld1 = new LinkedListDeque<>();
+         lld1.addLast(1);
+         lld1.addLast(2);
+         lld1.addFirst(0);
+
+         int expected = lld1.toList().size();
+
+         assertThat(lld1.size()).isEqualTo(expected);
+         lld1.addLast(3);
+
+         expected = lld1.toList().size();
+         assertThat(lld1.size()).isEqualTo(expected);
+
+         Deque<Integer> lld2 = new LinkedListDeque<>();
+
+         expected = lld2.toList().size();
+         assertThat(lld2.size()).isEqualTo(expected);
+    }
+
+    @Test
+    public void getTest() {
+         Deque<String> lld1 = new LinkedListDeque<>();
+
+         assertThat(lld1.get(0)).isEqualTo(null);
+
+        lld1.addLast("1");
+        lld1.addLast("2");
+        lld1.addLast("3");
+
+        assertThat(lld1.get(0)).isEqualTo("1");
+    }
+
+    @Test
+    public void getRecursiveTest() {
+        Deque<String> lld1 = new LinkedListDeque<>();
+
+        assertThat(lld1.getRecursive(0)).isEqualTo(null);
+
+        lld1.addLast("1");
+        lld1.addLast("2");
+        lld1.addLast("3");
+
+        assertThat(lld1.getRecursive(0)).isEqualTo("1");
+        assertThat(lld1.get(0)).isEqualTo("1");
+    }
+
+    @Test
+    public void removeLastTest() {
+         Deque<String> lld1 = new LinkedListDeque<>();
+        assertThat(lld1.removeLast()).isEqualTo(null);
+        lld1.addLast("0");
+         lld1.addLast("1");
+         lld1.addLast("2");
+         lld1.addLast("3");
+         assertThat(lld1.removeLast()).isEqualTo("3");
+         assertThat(lld1.toList()).containsExactly("0", "1", "2");
+
+    }
+
+    @Test
+    public void removeFirstTest() {
+        Deque<String> lld1 = new LinkedListDeque<>();
+        assertThat(lld1.removeFirst()).isEqualTo(null);
+        lld1.addLast("0");
+        lld1.addLast("1");
+        lld1.addLast("2");
+        lld1.addLast("3");
+        assertThat(lld1.removeFirst()).isEqualTo("0");
+        assertThat(lld1.toList()).containsExactly("1", "2", "3");
+    }
+
+    @Test
+    public void removeFirstAndLastTest() {
+        Deque<String> lld1 = new LinkedListDeque<>();
+        assertThat(lld1.removeLast()).isEqualTo(null);
+        assertThat(lld1.removeFirst()).isEqualTo(null);
+        lld1.addLast("0");
+        lld1.addLast("1");
+        lld1.addLast("2");
+        lld1.addLast("3");
+        assertThat(lld1.removeLast()).isEqualTo("3");
+        assertThat(lld1.removeFirst()).isEqualTo("0");
+        assertThat(lld1.toList()).containsExactly("1", "2");
+    }
 }

@@ -24,11 +24,12 @@ public class LinkedListDeque<T> implements Deque<T> {
             this.next = this.prev;
         }
 
-
-
-        /**
-         * this constructor is for the list which has been already created.
-         */
+        public T getItem(int index) {
+            if (index == 0) {
+                return this.item;
+            }
+            return (T) this.next.getItem(index - 1);
+        }
     }
     public LinkedListDeque() {
         this.sentinel = new Node<>();
@@ -49,7 +50,7 @@ public class LinkedListDeque<T> implements Deque<T> {
         newNode.prev = servant;
         firstNode.prev = newNode;
         newNode.next = firstNode;
-
+        this.size++;
     }
 
     @Override
@@ -61,7 +62,7 @@ public class LinkedListDeque<T> implements Deque<T> {
         newNode.prev = lastNode;
         servant.prev = newNode;
         newNode.next = servant;
-
+        this.size++;
     }
 
     @Override
@@ -77,51 +78,64 @@ public class LinkedListDeque<T> implements Deque<T> {
 
     @Override
     public boolean isEmpty() {
+        if (this.size == 0) {
+            return true;
+        }
         return false;
     }
 
     @Override
     public int size() {
-        return 0;
+        return this.size;
     }
 
     @Override
     public T removeFirst() {
-        return null;
+        if (this.size == 0) {
+            return null;
+        }
+        Node<T> first = this.sentinel.next;
+        this.sentinel.next = first.next;
+        first.next.prev = this.sentinel;
+        first.next = null;
+        first.prev = null;
+        return first.item;
     }
 
     @Override
     public T removeLast() {
-        return null;
+        if (this.size == 0) {
+            return null;
+        }
+        Node<T> last = this.sentinel.prev;
+        this.sentinel.prev = last.prev;
+        last.prev.next = this.sentinel;
+        last.next = null;
+        last.prev = null;
+        return last.item;
     }
 
     @Override
     public T get(int index) {
-        return null;
+        if (this.size == 0) {
+            return null;
+        }
+        Node<T> currentNote = this.sentinel.next;
+        while (index != 0) {
+            currentNote = currentNote.next;
+            index--;
+        }
+        return currentNote.item;
     }
 
     @Override
     public T getRecursive(int index) {
-        return null;
+        if (this.size == 0) {
+            return null;
+        }
+        return (T) this.sentinel.next.getItem(index);
     }
 
-    public static void main(String[] args) {
-        LinkedListDeque<Integer> q = new LinkedListDeque<>();
-        System.out.println(q.sentinel.prev.item == q.sentinel.next.item);
-        q.addLast(6);
-        q.addLast(5);
-        q.addLast(4);
-        q.addLast(3);
-        q.addLast(2);
-        q.addLast(1);
-        System.out.println("Test add first method");
-        LinkedListDeque<Integer> q2 = new LinkedListDeque<>();
-        q2.addFirst(6);
-        q2.addFirst(5);
-        q2.addFirst(4);
-        q2.addFirst(3);
-        q2.addFirst(2);
-        q2.addFirst(1);
-        System.out.println(q2.toList());
-    }
+
+
 }
