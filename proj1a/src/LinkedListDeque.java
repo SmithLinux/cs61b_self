@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.List;
 
 public class LinkedListDeque<T> implements Deque<T> {
@@ -65,7 +66,13 @@ public class LinkedListDeque<T> implements Deque<T> {
 
     @Override
     public List<T> toList() {
-        return null;
+        List<T> returnList = new ArrayList<>();
+        Node<T> nextNode = this.sentinel.next;
+        while (nextNode != this.sentinel) {
+            returnList.add(nextNode.item);
+            nextNode = nextNode.next;
+        }
+        return returnList;
     }
 
     @Override
@@ -115,8 +122,6 @@ public class LinkedListDeque<T> implements Deque<T> {
         q2.addFirst(3);
         q2.addFirst(2);
         q2.addFirst(1);
-
-
-
+        System.out.println(q2.toList());
     }
 }
