@@ -1,5 +1,6 @@
 import org.checkerframework.checker.units.qual.A;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ArrayDeque<T> implements Deque<T> {
@@ -19,8 +20,8 @@ public class ArrayDeque<T> implements Deque<T> {
     }
     @Override
     public void addFirst(T x) {
-        if (this.item.length > 10 || this.size == this.item.length) {
-            this.resize();
+        if (this.size == this.item.length) {
+            this.resize((int) FACTOR);
         }
 
         if(this.nextFirst == -1) {
@@ -36,85 +37,150 @@ public class ArrayDeque<T> implements Deque<T> {
 
     }
 
-    public void resize() {
+    public void resize(int factor) {
         //two strategy for resize
         //1.if the nextFirst > nextLast means the nextFirst is going to the back of the list
         //2.if the nextLast < nextFirst means the nextLast is going to the front of the list
         //3.no one goes further, peace!
-        double usage = (double) this.size / (double) this.item.length;
-        if (this.size != this.item.length && usage > RFACTOR) {
-            return;
-        }
-
         T[] newItem;
-        int factor;
-        int startPosition;
-        int rightIndex;
-        int middle = this.item.length / 2;
-        if (this.size == this.item.length) {
-            // make array bigger size
-            factor = (int) Math.round(this.item.length * FACTOR);
-            newItem = (T[]) new Object[factor];
-            startPosition = newItem.length / 2 - middle;
-            if (nextFirst >= middle) { //left side is full
-                System.arraycopy(this.item, 0, newItem, startPosition, middle); //copy left side
-                System.arraycopy(this.item, this.nextFirst, newItem, startPosition - middle, this.size - this.nextFirst); //copy remain left side but on the right side of the old array
+        int newFirst;
+        int newLast;
+        int capacity;
+        if (factor == FACTOR) {
+            int middle = this.item.length / 2;
+            if (this.nextFirst >= middle) { //nextFirst has came to the right
+                capacity = (int) (this.item.length * FACTOR);
+                newItem = (T[]) new Object[capacity];
+                newFirst = newItem.length / 2 - 1;
+                newLast = newItem.length / 2;
+                // [1,2,3,4,5,6,7,8,9,10]
+                for (int i = middle - 1; i >= 0; i--) { //the left side
+                    newItem[newFirst] = this.get(i);
+                    newFirst--;
+                }
 
-                int totalItemInFirst = (this.item.length - this.nextFirst + this.item.length / 2);
-                rightIndex = (newItem.length / 2 - 1) - totalItemInFirst;
-                this.nextFirst = rightIndex;
+                for (int i = middle; i < this.nextLast; i++) { //the right side
+                    newItem[newLast] = this.get(i);
+                    newLast++;
+                }
+
+                for (int i = this.size - 1; i >= this.nextFirst; i--) { //the rest
+                    newItem[newFirst] = this.get(i);
+                    newFirst--;
+                }
+
+                this.nextFirst = newFirst;
+                this.nextLast = newLast;
                 this.item = newItem;
 
-            } else if (nextLast < middle) { //right side is full
-                System.arraycopy(this.item, 0, newItem, startPosition, this.size);
+            } else if (this.nextLast < middle) { //nextLast has came to the left
+                capacity = (int) (this.item.length * FACTOR);
+                newItem = (T[]) new Object[capacity];
+                newFirst = newItem.length / 2 - 1;
+                newLast = newItem.length / 2;
+                // [1,2,3,4,5,6,7,8,9,10]
+                for (int i = middle - 1; i > this.nextFirst; i--) { //the left side
+                    newItem[newFirst] = this.get(i);
+                    newFirst--;
+                }
 
-                int totalItemInRight = (this.item.length - this.nextFirst + this.item.length / 2);
-                rightIndex = (newItem.length / 2 - 1) - totalItemInRight;
-                this.nextFirst = rightIndex;
+                for (int i = middle; i < this.size; i++) { //the right side
+                    newItem[newLast] = this.get(i);
+                    newLast++;
+                }
 
-            } else {
-                System.arraycopy(this.item, 0, newItem, startPosition, this.size);
+                for (int i = 0; i <= this.nextLast; i++) { //the rest
+                    newItem[newLast] = this.get(i);
+                    newLast++;
+                }
+                this.nextFirst = newFirst;
+                this.nextLast = newLast;
+                this.item = newItem;
             }
-            return;
+        }
+        else if (factor == RFACTOR) {
+            capacity = this.item.length / 2;
+            newItem = (T[]) new Object[capacity];
+            newFirst = capacity / 2 - (this.item.length - this.nextFirst);
+            newLast = newFirst + size;
+            System.arraycopy(this.item, this.nextFirst, newItem, newFirst, size);
+            this.nextFirst = newFirst;
+            this.nextLast = newLast;
         }
 
-
-        //shrink array
-        factor = Math.round(this.item.length / 2);
-        newItem = (T[]) new Object[factor];
-        startPosition = newItem.length / 2 - (this.nextLast - this.nextFirst) / 2;
-        System.arraycopy(this.item, this.nextFirst, newItem, startPosition, size);
+//        if (this.size > 10) { //when size is bigger than 10 then to consider to shrink.
+//
+//        }
 
     }
 
     @Override
     public void addLast(T x) {
-        this.resize();
-
-        this.item[this.nextLast] = x;
-
-        this.nextLast++;
-
-        this.size++;
+        if (this.size == this.item.length) {
+            this.resize((int) FACTOR);
+        }
 
         if(this.nextLast == this.item.length) {
             this.nextLast = 0;
         }
+        this.item[this.nextLast] = x;
+
+        if (this.nextLast != this.item.length / 2 - 1) {
+            this.nextLast++;
+        }
+
+        this.size++;
+
     }
 
     @Override
     public List<T> toList() {
-        return null;
+        List<T> returnList = new ArrayList<>();
+        int middle = this.item.length / 2;
+        if (this.nextFirst >= middle) { //been to the right side
+
+            for (int i = this.nextFirst + 1; i < this.item.length; i++) {
+                returnList.add(this.get(i));
+            }
+            for (int i = 0; i < middle; i++) {
+                returnList.add(this.get(i));
+            }
+            for (int i = middle; i < this.nextLast; i++) {
+                returnList.add(this.get(i));
+            }
+        } else if (this.nextLast < middle) { //been to the left side
+            for (int i = this.nextFirst + 1; i < middle; i++) { //copy from the first to the last
+                returnList.add(this.get(i));
+            }
+            for (int i = middle; i < this.item.length; i++) {
+                returnList.add(this.get(i));
+            }
+            for (int i = 0; i <= this.nextLast - 1; i++) {
+                returnList.add(this.get(i));
+            }
+        } else {
+            //not go further
+            for (int i = this.nextFirst + 1; i < middle; i++) {
+                returnList.add(this.get(i));
+            }
+            for (int i = middle; i <= this.nextLast - 1; i++) {
+                returnList.add(this.get(i));
+            }
+        }
+        return returnList;
     }
 
     @Override
     public boolean isEmpty() {
+        if (this.size == 0) {
+            return true;
+        }
         return false;
     }
 
     @Override
     public int size() {
-        return 0;
+        return this.size;
     }
 
     @Override
@@ -129,41 +195,22 @@ public class ArrayDeque<T> implements Deque<T> {
 
     @Override
     public T get(int index) {
-        return null;
+        return this.item[index];
     }
 
     public static void main(String[] args) {
         Deque<Integer> al = new ArrayDeque<>();
-//        al.addLast(5);
-//        al.addLast(6);
-//        al.addLast(7);
-//        al.addLast(8);
-//        al.addLast(9);
-//        al.addLast(0);
-//        al.addLast(1);
-//        al.addLast(2);
-//        al.addLast(3);
-//        al.addLast(4);
-        al.addFirst(1);
-        al.addFirst(2);
-        al.addFirst(3);
-        al.addFirst(4);
-        al.addFirst(5);
-        al.addFirst(6);
-        al.addFirst(7);
-        al.addFirst(8);
-        al.addFirst(9);
-        al.addFirst(10);
-        al.addFirst(11);
-        al.addFirst(12);
-        al.addFirst(13);
-        al.addFirst(14);
-        al.addFirst(15);
-        al.addFirst(16);
-        al.addFirst(17);
-        al.addFirst(18);
-        al.addFirst(19);
-        al.addFirst(20);
+//        for(int i = 0; i < 20; i++) {
+//            al.addFirst(i);
+//        }
+        for(int i = 0; i < 21; i++) {
+            al.addLast(i);
+        }
+
+//        for(int i = 0; i < 11; i++) {
+//            al.addLast(i);
+//            al.addFirst(i);
+//        }
         System.out.println("over!");
     }
 }
