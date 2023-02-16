@@ -10,24 +10,48 @@ public class ArrayDequeTest {
 
     @Test
     public void toListTest() {
-        Deque<Integer> all1 = new ArrayDeque<>();
-        List<Integer> expected = new ArrayList<>();
-        for(int i = 0; i < 21; i++) {
-            all1.addLast(i);
-            expected.add(i);
-        }
         Deque<Integer> all2 = new ArrayDeque<>();
-        for(int i = 20; i >= 0; i--) {
+        List<Integer> af = new ArrayList<>();
+        for(int i = 9; i >= 0; i--) {
             all2.addFirst(i);
         }
-        List<Integer> list = all1.toList();
+
+        for (int i = 0; i < 10; i ++) {
+            af.add(i);
+        }
         List<Integer> list2 = all2.toList();
-        assertThat(list).containsExactlyElementsIn(expected).inOrder();
-        assertThat(list2).containsExactlyElementsIn(expected).inOrder();
+        assertThat(list2).containsExactlyElementsIn(af).inOrder();
     }
 
     @Test
-    public void getLastTest(){}
+    public void getFirstTest() {
+        Deque<Integer> all2 = new ArrayDeque<>();
+        List<Integer> af = new ArrayList<>();
+        for(int i = 99; i >= 0; i--) {
+            all2.addFirst(i);
+        }
+
+        for (int i = 0; i < 100; i ++) {
+            af.add(i);
+        }
+        List<Integer> list2 = all2.toList();
+        assertThat(list2).containsExactlyElementsIn(af).inOrder();
+    }
+
+    @Test
+    public void getLastTest() {
+        Deque<Integer> all2 = new ArrayDeque<>();
+        List<Integer> al = new ArrayList<>();
+        for(int i = 0; i < 100; i++) {
+            all2.addLast(i);
+        }
+
+        for (int i = 0; i < 100; i ++) {
+            al.add(i);
+        }
+        List<Integer> list2 = all2.toList();
+        assertThat(list2).containsExactlyElementsIn(al).inOrder();
+    }
 
     @Test
     public void getFirstTestBasic() {
@@ -115,11 +139,41 @@ public class ArrayDequeTest {
 
     @Test
     public void removeLast() {
+        Deque<Integer> all2 = new ArrayDeque<>();
+        List<Integer> af = new ArrayList<>();
+        List<Integer> expected = new ArrayList<>();
+        for(int i = 0; i < 30; i++) {
+            all2.addLast(i);
+        }
 
+        for(int i = 0; i < 10; i++) {
+            af.add(all2.removeLast());
+        }
+
+        for (int i = 29; i > 19; i --) {
+            expected.add(i);
+        }
+
+        assertThat(af).containsExactlyElementsIn(expected).inOrder();
     }
 
     @Test
     public void removeFirst() {
+        Deque<Integer> all2 = new ArrayDeque<>();
+        List<Integer> af = new ArrayList<>();
+        List<Integer> expected = new ArrayList<>();
+        for(int i = 30; i >= 0; i--) {
+            all2.addFirst(i);
+        }
 
+        for(int i = 0; i < 10; i++) {
+            af.add(all2.removeFirst());
+        }
+
+        for (int i = 0; i < 10; i ++) {
+            expected.add(i);
+        }
+        assertThat(af).containsExactlyElementsIn(expected).inOrder();
     }
+
 }
