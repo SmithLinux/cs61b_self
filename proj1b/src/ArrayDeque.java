@@ -130,43 +130,7 @@ public class ArrayDeque<T> implements Deque<T> {
 
     @Override
     public T get(int index) {
-        if (index < 0 || size == 0) {
-            return null;
-        }
-        int upper = this.nextLast - 1;
-        int lower = this.nextFirst + 1;
-        if (this.nextFirst == this.item.length / 2) {
-            lower = this.nextFirst;
-        } else if (this.nextLast == this.item.length / 2 - 1) {
-            upper = this.nextLast;
-        }
-
-
-
-        if (index >= size) {
-            return null;
-        }
-
-        if (upper < this.nextFirst) { //the nextLast has been to the left of the array [6,7,n,n,2,3,4,5]
-            int rightSize = this.item.length - lower;
-            if (index < rightSize) {
-                return this.item[index + lower];
-            }else {
-                return this.item[index - rightSize];
-            }
-        }else if (lower > this.nextLast) { //the nextFirst has been to the right of the array [3,2,1,0,n,n,5,4]
-            int leftSize = this.item.length - upper - 1;
-            if (index < leftSize) {
-                return this.item[index + upper + 1];
-            }else {
-                return this.item[index - leftSize];
-            }
-        }else {
-            if (index + lower > upper) {
-                return null;
-            }
-            return item[index + lower];
-        }
+        return null;
 
     }
 
