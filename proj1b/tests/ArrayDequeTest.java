@@ -142,6 +142,8 @@ public class ArrayDequeTest {
         Deque<Integer> all2 = new ArrayDeque<>();
         List<Integer> af = new ArrayList<>();
         List<Integer> expected = new ArrayList<>();
+        int sizeAfterRemoved = 20;
+
         for(int i = 0; i < 30; i++) {
             all2.addLast(i);
         }
@@ -155,6 +157,7 @@ public class ArrayDequeTest {
         }
 
         assertThat(af).containsExactlyElementsIn(expected).inOrder();
+        assertThat(all2.size()).isEqualTo(sizeAfterRemoved);
     }
 
     @Test
@@ -162,7 +165,9 @@ public class ArrayDequeTest {
         Deque<Integer> all2 = new ArrayDeque<>();
         List<Integer> af = new ArrayList<>();
         List<Integer> expected = new ArrayList<>();
-        for(int i = 30; i >= 0; i--) {
+        int sizeAfterRemoved = 20;
+
+        for(int i = 29; i >= 0; i--) {
             all2.addFirst(i);
         }
 
@@ -174,6 +179,7 @@ public class ArrayDequeTest {
             expected.add(i);
         }
         assertThat(af).containsExactlyElementsIn(expected).inOrder();
+        assertThat(all2.size()).isEqualTo(sizeAfterRemoved);
     }
 
 }
