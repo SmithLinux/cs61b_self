@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.google.common.truth.Truth.assertThat;
-import static com.google.common.truth.Truth.assertWithMessage;
 
 public class ArrayDequeTest {
 
@@ -142,17 +141,17 @@ public class ArrayDequeTest {
         Deque<Integer> all2 = new ArrayDeque<>();
         List<Integer> af = new ArrayList<>();
         List<Integer> expected = new ArrayList<>();
-        int sizeAfterRemoved = 20;
+        int sizeAfterRemoved = 1;
 
-        for(int i = 0; i < 30; i++) {
+        for(int i = 0; i < 40; i++) {
             all2.addLast(i);
         }
 
-        for(int i = 0; i < 10; i++) {
+        for(int i = 0; i < 39; i++) {
             af.add(all2.removeLast());
         }
 
-        for (int i = 29; i > 19; i --) {
+        for (int i = 39; i > 0; i --) {
             expected.add(i);
         }
 
@@ -165,21 +164,72 @@ public class ArrayDequeTest {
         Deque<Integer> all2 = new ArrayDeque<>();
         List<Integer> af = new ArrayList<>();
         List<Integer> expected = new ArrayList<>();
-        int sizeAfterRemoved = 20;
+        int sizeAfterRemoved = 0;
 
         for(int i = 29; i >= 0; i--) {
             all2.addFirst(i);
         }
 
-        for(int i = 0; i < 10; i++) {
+        for(int i = 0; i < 30; i++) {
             af.add(all2.removeFirst());
         }
 
-        for (int i = 0; i < 10; i ++) {
+        for (int i = 0; i < 30; i ++) {
             expected.add(i);
         }
         assertThat(af).containsExactlyElementsIn(expected).inOrder();
         assertThat(all2.size()).isEqualTo(sizeAfterRemoved);
+    }
+
+
+    @Test
+    public void removeAddResizeTest() {
+        Deque<Integer> all = new ArrayDeque<>();
+        List<Integer> list = new ArrayList<>();
+
+        Deque<Integer> all2 = new ArrayDeque<>();
+        List<Integer> list2 = new ArrayList<>();
+
+        for (int i = 0; i < 100; i++) {
+            all.addLast(i);
+        }
+
+        for (int i = 0; i < 100; i++) {
+            list.add(i);
+        }
+
+        for (int i = 0; i < 80; i++) { // 160
+            all.removeLast();
+        }
+
+        for (int i = 20; i < 100; i++) {
+            all.addLast(i);
+        }
+
+        /**
+         */
+
+        for (int i = 0; i < 100; i++) {
+            all2.addFirst(i);
+        }
+
+        for (int i = 99; i >= 0; i--) {
+            list2.add(i);
+        }
+
+        for (int i = 0; i < 80; i++) { // 160
+            all2.removeLast();
+        }
+
+        for (int i = 79; i >= 0; i--) {
+            all2.addLast(i);
+        }
+
+        assertThat(all.toList()).containsExactlyElementsIn(list).inOrder();
+        assertThat(all2.toList()).containsExactlyElementsIn(list2).inOrder();
+
+
+
     }
 
 }
