@@ -39,36 +39,50 @@ public class ArrayDeque<T> implements Deque<T> {
         }
         this.item[this.nextFirst] = x;
 
-        if (this.nextFirst != this.nextLast) {
-            this.nextFirst--;
-        }
-
+        this.nextFirst--;
         this.size++;
 
     }
 
-    public void resize(int factor) {
+    public void resize(double factor) {
         //two strategy for resize
         //1.if the nextFirst > nextLast means the nextFirst is going to the back of the list
         //2.if the nextLast < nextFirst means the nextLast is going to the front of the list
         //3.no one goes further, peace!
         T[] newItem;
-        int newFirst;
-        int newLast;
-        int capacity;
+        int newFirst = 2;
+        int newLast = newFirst + 1;
+
         if (factor == FACTOR) { //resizing up
-            capacity = (int) (this.item.length * FACTOR);
-            newItem = (T[]) new Object[capacity];
-            newFirst = newItem.length / 2 - 1;
-            newLast = newItem.length / 2;
-            for (int i = 0; i < this.item.length; i++) {
-                newItem[newLast] = this.get(i);
-                newLast++;
-            }
-            this.item = newItem;
-            this.nextLast = newLast;
-            this.nextFirst = newFirst;
+            newItem = getResizeT(FACTOR);
+
+            relocate(newFirst, newLast, newItem);
         }
+
+        if (factor == RFACTOR) { //resizing down
+            newItem = getResizeT(RFACTOR * 2);
+
+            relocate(newFirst, newLast, newItem);
+        }
+    }
+
+    private void relocate(int newFirst, int newLast, T[] newItem) {
+        for (int i = 0; i < this.size; i++) {
+            newItem[newLast] = this.get(i);
+            newLast++;
+        }
+
+        this.item = newItem;
+        this.nextLast = newLast;
+        this.nextFirst = newFirst;
+    }
+
+    private T[] getResizeT(double factor) {
+        T[] newItem;
+        int capacity;
+        capacity = (int) (this.item.length * factor);
+        newItem = (T[]) new Object[capacity];
+        return newItem;
     }
 
     @Override
@@ -82,10 +96,7 @@ public class ArrayDeque<T> implements Deque<T> {
         }
         this.item[this.nextLast] = x;
 
-        if (this.nextLast != this.nextFirst) {
-            this.nextLast++;
-        }
-
+        this.nextLast++;
         this.size++;
 
     }
@@ -117,9 +128,20 @@ public class ArrayDeque<T> implements Deque<T> {
         if (size == 0) {
             return null;
         }
+
+        if (((float)size / (float)this.item.length) <= RFACTOR && this.item.length > 10) {
+            resize(RFACTOR);
+        }
+
         T removed = this.item[this.nextFirst + 1];
         this.item[this.nextFirst + 1] = null;
         this.nextFirst = this.nextFirst + 1;
+
+        if (this.nextFirst + 1 == this.item.length) {
+            this.nextFirst = -1;
+        }
+
+
         this.size = this.size - 1;
         return removed;
     }
@@ -129,9 +151,19 @@ public class ArrayDeque<T> implements Deque<T> {
         if (size == 0) {
             return null;
         }
+
+        if (((float)size / (float)this.item.length) <= RFACTOR && this.item.length > 10) {
+            resize(RFACTOR);
+        }
+
         T removed = this.item[this.nextLast - 1];
-        this.item[this.nextFirst - 1] = null;
+        this.item[this.nextLast - 1] = null;
         this.nextLast = this.nextLast - 1;
+
+        if (this.nextLast == 0) {
+            this.nextLast = this.item.length;
+        }
+
         this.size = this.size - 1;
         return removed;
     }
@@ -141,24 +173,26 @@ public class ArrayDeque<T> implements Deque<T> {
         if (size == 0) {
             return null;
         }
+        if (index >= size) {
+            return null;
+        }
         /**
          * three condition
-         * 1.lower > upper. means left side is full
-         * 2.lower < upper. means right side is full
          * FINISHED 3.nextFirst < nextLast.
+         * the answer is no matter where is nextFirst or nextLast at, we always count from the left to the right
          */
-        int lower = this.nextFirst + 1;
-        int upper = this.nextLast - 1;
-        if (lower > upper) {
-            if (this.)
-        }else if(lower < upper) {
-
+        int reallyIndex;
+        if (this.nextFirst == this.nextLast) {
+            reallyIndex = this.nextFirst + index;
+        }else {
+            reallyIndex = this.nextFirst + index + 1;
         }
 
-        if (index <= (upper - lower)) {
-            return this.item[index + lower];
+        if (reallyIndex >= this.item.length) {
+            return this.item[reallyIndex - this.item.length];
         }
-        return null;
+        return this.item[reallyIndex];
+
 
     }
 
@@ -168,14 +202,42 @@ public class ArrayDeque<T> implements Deque<T> {
         List<Integer> arr = new ArrayList<>();
 //        Deque<Integer> al = new ArrayDeque<>();
 //        List<Integer> lastArray = new ArrayList<>();
-        for (int i = 0; i < 5; i++) {
-            af.addFirst(i);
-            af.addLast(i);
-        }
+        /**
+         * test for regular get method.
+         */
+//        for (int i = 0; i < 5; i++) {
+//            af.addFirst(i);
+//            af.addLast(i);
+//        }
+//
+//        for (int i = 0; i < 10; i++) {
+//            arr.add(af.get(i));
+//        }
 
-        for (int i = 0; i < 10; i++) {
-            arr.add(af.get(i));
-        }
+        /**
+         * test for nextFirst method which nextFirst have been to the left .
+         */
+
+//        for (int i = 10; i > 0; i--) {
+//            af.addFirst(i);
+//        }
+//
+//        for (int i = 0; i < 10; i++) {
+//            arr.add(af.get(i));
+//        }
+
+        /**
+         * test for nextLast method which nextLast have been to the right .
+         */
+//
+//        for (int i = 0; i < 10; i++) {
+//            af.addLast(i);
+//        }
+//
+//        for (int i = 0; i < 10; i++) {
+//            arr.add(af.get(i));
+//        }
+
 //        System.out.println("get first test");
 //        for (int i = 0; i < 15; i++) {
 //            arr.add(af.get(i));
@@ -196,5 +258,5 @@ public class ArrayDeque<T> implements Deque<T> {
 
 /**
  * functions which need to refactor are:
- * resize() get()
+ * removeFirst() removeLast() resize();
  */
