@@ -190,19 +190,22 @@ public class ArrayDequeTest {
         Deque<Integer> all2 = new ArrayDeque<>();
         List<Integer> list2 = new ArrayList<>();
 
-        for (int i = 0; i < 100; i++) {
+        Deque<Integer> all3 = new ArrayDeque<>();
+        List<Integer> list3 = new ArrayList<>();
+
+        for (int i = 0; i < 10000; i++) {
             all.addLast(i);
         }
 
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 10000; i++) {
             list.add(i);
         }
 
-        for (int i = 0; i < 80; i++) { // 160
+        for (int i = 0; i < 8000; i++) { // 160
             all.removeLast();
         }
 
-        for (int i = 20; i < 100; i++) {
+        for (int i = 2000; i < 10000; i++) {
             all.addLast(i);
         }
 
@@ -225,8 +228,28 @@ public class ArrayDequeTest {
             all2.addLast(i);
         }
 
+        /**
+         */
+
+        for (int i = 0; i < 100; i++) {
+            all3.addFirst(i);
+        }
+
+        for (int i = 99; i >= 0; i--) {
+            list3.add(i);
+        }
+
+        for (int i = 0; i < 80; i++) { // 160
+            all3.removeFirst();
+        }
+
+        for (int i = 20; i < 100; i++) {
+            all3.addFirst(i);
+        }
+
         assertThat(all.toList()).containsExactlyElementsIn(list).inOrder();
         assertThat(all2.toList()).containsExactlyElementsIn(list2).inOrder();
+        assertThat(all3.toList()).containsExactlyElementsIn(list3).inOrder();
 
 
 
