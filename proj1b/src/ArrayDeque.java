@@ -34,12 +34,12 @@ public class ArrayDeque<T> implements Deque<T> {
             this.resize((int) FACTOR);
         }
 
-        if(this.nextFirst == -1) {
+        if(this.nextFirst == -1) { // if the space of left side is full.
             this.nextFirst = this.item.length - 1;
         }
         this.item[this.nextFirst] = x;
 
-        if (this.nextFirst != this.item.length / 2) {
+        if (this.nextFirst != this.nextLast) {
             this.nextFirst--;
         }
 
@@ -77,12 +77,12 @@ public class ArrayDeque<T> implements Deque<T> {
             this.resize((int) FACTOR);
         }
 
-        if(this.nextLast == this.item.length) {
+        if(this.nextLast == this.item.length) { // if the space of right side is full.
             this.nextLast = 0;
         }
         this.item[this.nextLast] = x;
 
-        if (this.nextLast != this.item.length / 2 - 1) {
+        if (this.nextLast != this.nextFirst) {
             this.nextLast++;
         }
 
@@ -114,49 +114,87 @@ public class ArrayDeque<T> implements Deque<T> {
 
     @Override
     public T removeFirst() {
+        if (size == 0) {
+            return null;
+        }
         T removed = this.item[this.nextFirst + 1];
         this.item[this.nextFirst + 1] = null;
         this.nextFirst = this.nextFirst + 1;
+        this.size = this.size - 1;
         return removed;
     }
 
     @Override
     public T removeLast() {
+        if (size == 0) {
+            return null;
+        }
         T removed = this.item[this.nextLast - 1];
         this.item[this.nextFirst - 1] = null;
         this.nextLast = this.nextLast - 1;
+        this.size = this.size - 1;
         return removed;
     }
 
     @Override
     public T get(int index) {
+        if (size == 0) {
+            return null;
+        }
+        /**
+         * three condition
+         * 1.lower > upper. means left side is full
+         * 2.lower < upper. means right side is full
+         * FINISHED 3.nextFirst < nextLast.
+         */
+        int lower = this.nextFirst + 1;
+        int upper = this.nextLast - 1;
+        if (lower > upper) {
+            if (this.)
+        }else if(lower < upper) {
+
+        }
+
+        if (index <= (upper - lower)) {
+            return this.item[index + lower];
+        }
         return null;
 
     }
 
 
     public static void main(String[] args) {
-//        Deque<Integer> af = new ArrayDeque<>();
-//        List<Integer> arr = new ArrayList<>();
-        Deque<Integer> al = new ArrayDeque<>();
-        List<Integer> lastArray = new ArrayList<>();
-//        for (int i = 0; i < 15; i++) {
-//            af.addFirst(i);
-//        }
+        Deque<Integer> af = new ArrayDeque<>();
+        List<Integer> arr = new ArrayList<>();
+//        Deque<Integer> al = new ArrayDeque<>();
+//        List<Integer> lastArray = new ArrayList<>();
+        for (int i = 0; i < 5; i++) {
+            af.addFirst(i);
+            af.addLast(i);
+        }
+
+        for (int i = 0; i < 10; i++) {
+            arr.add(af.get(i));
+        }
 //        System.out.println("get first test");
 //        for (int i = 0; i < 15; i++) {
 //            arr.add(af.get(i));
 //        }
-//        System.out.println(arr);
+        System.out.println(arr);
         System.out.println("over!");
-        for (int i = 0; i < 15; i++) {
-            al.addLast(i);
-        }
-        System.out.println("get last test");
-        for (int i = 0; i < 15; i++) {
-            lastArray.add(al.get(i));
-        }
-        System.out.println(lastArray);
-        System.out.println("over!");
+//        for (int i = 0; i < 10; i++) {
+//            al.addLast(i);
+//        }
+//        System.out.println("get last test");
+//        for (int i = 0; i < 15; i++) {
+//            lastArray.add(al.get(i));
+//        }
+//        System.out.println(al);
+//        System.out.println("over!");
     }
 }
+
+/**
+ * functions which need to refactor are:
+ * resize() get()
+ */
