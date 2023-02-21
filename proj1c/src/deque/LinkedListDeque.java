@@ -101,6 +101,7 @@ public class LinkedListDeque<T> implements Deque<T> {
         first.next.prev = this.sentinel;
         first.next = null;
         first.prev = null;
+        this.size--;
         return first.item;
     }
 
@@ -114,6 +115,7 @@ public class LinkedListDeque<T> implements Deque<T> {
         last.prev.next = this.sentinel;
         last.next = null;
         last.prev = null;
+        this.size--;
         return last.item;
     }
 
