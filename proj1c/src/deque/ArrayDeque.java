@@ -184,11 +184,7 @@ public class ArrayDeque<T> implements Deque<T> {
          * the answer is no matter where is nextFirst or nextLast at, we always count from the left to the right
          */
         int reallyIndex;
-        if (this.nextFirst == this.nextLast) {
-            reallyIndex = this.nextFirst + index;
-        } else {
-            reallyIndex = this.nextFirst + index + 1;
-        }
+        reallyIndex = this.nextFirst + index + 1;
 
         if (reallyIndex >= this.item.length) {
             return this.item[reallyIndex - this.item.length];
