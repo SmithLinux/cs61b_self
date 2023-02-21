@@ -25,8 +25,9 @@ public class GuitarString {
         //       Your should initially fill your buffer array with zeros.
         this.buffer = new ArrayDeque<>();
 //        buffer.addLast((double) Math.round(SR / frequency));
-        for (int i = 0; i< Math.round(SR / frequency); i++) {
-            buffer.addLast(0.0);
+        long limit = Math.round(SR / frequency);
+        for (long i = 0; i < limit; i++) {
+            buffer.addFirst(0.0);
         }
     }
 
