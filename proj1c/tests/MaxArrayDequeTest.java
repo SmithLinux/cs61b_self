@@ -19,6 +19,14 @@ public class MaxArrayDequeTest {
         }
     }
 
+    private static class CharComparator implements Comparator<Character> {
+
+        @Override
+        public int compare(Character o1, Character o2) {
+            return o1.compareTo(o2);
+        }
+    }
+
     @Test
     public void maxTest() {
         MaxArrayDeque<Integer> mad = new MaxArrayDeque<>(new IntegerComparator());
@@ -33,6 +41,19 @@ public class MaxArrayDequeTest {
         assertThat(maximum).isEqualTo(expected);
     }
 
+    @Test
+    public void maxComparatorTest() {
+        MaxArrayDeque<Character> mad = new MaxArrayDeque<>(new CharComparator());
+        Character expected = 'Z';
+        Character maximum;
+
+        for (int i = 0; i < 26; i++) {
+            mad.addLast((char)('A' + i));
+        }
+
+        maximum = mad.max(new CharComparator());
+        assertThat(maximum).isEqualTo(expected);
+    }
 
 
 }
