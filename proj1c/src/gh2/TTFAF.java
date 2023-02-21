@@ -23,8 +23,8 @@ public class TTFAF {
         }
 
         // You can also do this:
-//         GuitarPlayer player = new GuitarPlayer(new java.io.File("path/to/music.mid"));
-//         player.play();
+//        GuitarPlayer player = new GuitarPlayer(new java.io.File("/Users/leehowl/Downloads/Never-Gonna-Give-You-Up-3.mid"));
+//        player.play();
     }
 
     private static final String TTFAF =
