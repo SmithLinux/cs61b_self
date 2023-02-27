@@ -11,7 +11,6 @@ public class Percolation {
 
     // create N-by-N grid, with all sites initially blocked
     public Percolation(int N) {
-        // TODO: Fill in this constructor.
         percolate = new WeightedQuickUnionUF(N * N);
         site = new boolean[N * N];
         openSites = 0;
@@ -55,7 +54,6 @@ public class Percolation {
 
     // does the system percolate?
     public boolean percolates() {
-        // TODO: Fill in this method.
         int bottomRow = (int) Math.sqrt(this.site.length) - 1;
         for (int i = 0; i < bottomRow + 1; i++) {
             if (isFull(bottomRow, i)) {
@@ -116,7 +114,7 @@ public class Percolation {
             bottomRow(sites, xyTo1D(row, col));
         }
         else {
-            otherSites(sites, xyTo1D(row, col));
+           otherSites(sites, xyTo1D(row, col));
         }
         return sites;
     }
