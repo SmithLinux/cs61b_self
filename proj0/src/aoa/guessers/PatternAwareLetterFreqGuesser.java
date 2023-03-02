@@ -67,20 +67,9 @@ public class PatternAwareLetterFreqGuesser implements Guesser {
      */
     public Map<Character, Integer> getFreqMapThatMatchesPattern(String pattern) {
         Map<Character, Integer> letters = new TreeMap<>();
-<<<<<<< HEAD
-<<<<<<< HEAD
         List<String> matchedWords = getTheLengthMatchedWords(pattern);
         List<String> patternMatchesWords = getThePatternMatchesWords(matchedWords, pattern);
         for(String word : patternMatchesWords) {
-=======
-        List<String> matchedWords = getTheMatchedWords(pattern);
-        for(String word : matchedWords) {
->>>>>>> 0085b4b (proj0: fig the bug of PatternAweraLetterFreqGuesser.java)
-=======
-        List<String> matchedWords = getTheLengthMatchedWords(pattern);
-        List<String> patternMatchesWords = getThePatternMatchesWords(matchedWords, pattern);
-        for(String word : patternMatchesWords) {
->>>>>>> 0d5c9e8 (proj0: completed PatternAwareLetterFreqGuesser)
             for (int i = 0; i < word.length(); i++) {
                 if (!letters.containsKey(word.charAt(i))) {
                     letters.put(word.charAt(i), 1);
@@ -170,6 +159,7 @@ public class PatternAwareLetterFreqGuesser implements Guesser {
 //        System.out.println("--------------------------------");
 //        System.out.println(mw2);
 //        System.out.println(pmw2);
+<<<<<<< HEAD
 
 =======
         if (count == pattern.length()) {
@@ -220,6 +210,8 @@ public class PatternAwareLetterFreqGuesser implements Guesser {
 >>>>>>> 0085b4b (proj0: fig the bug of PatternAweraLetterFreqGuesser.java)
 =======
         System.out.println(pmw2);
+=======
+>>>>>>> 0037528 (proj0: fixing the bug of PAGALetterFreqGuesser)
 
 >>>>>>> 0d5c9e8 (proj0: completed PatternAwareLetterFreqGuesser)
     }
