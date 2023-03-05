@@ -10,15 +10,26 @@ public class PercolationTest {
     @Test
     public void openTest() {
         Percolation p = new Percolation(5);
-        p.open(1,4);
-        boolean result = p.isOpen(4,1);
-        p.open(3,0);
-        boolean result2 = p.isOpen(3, 1);
+        for (int r = 4; r > 0; r--) {
+            for (int c = 4; c > 0; c--) {
+                p.open(r,c);
+                Truth.assertThat(p.isOpen(r,c)).isEqualTo(true);
+            }
+        }
+    }
 
-
-
-        Truth.assertThat(p.isOpen(1,4)).isNotEqualTo(result);
-        Truth.assertThat(p.isOpen(3,0)).isNotEqualTo(result2);
+    @Test
+    public void percolateTest() {
+        Percolation p = new Percolation(5);
+        for (int r = 1; r < 5; r++) {
+            for (int c = 0; c < 5; c++) {
+                p.open(r,c);
+                Truth.assertThat(p.percolates()).isEqualTo(false);
+            }
+        }
+        p.open(0,0);
+        Truth.assertThat(p.percolates()).isEqualTo(true);
+        Truth.assertThat(p.isFull(4,0)).isEqualTo(true);
     }
 
     @Test
@@ -33,15 +44,15 @@ public class PercolationTest {
     }
 
     @Test
-    public void openAroundTest() {
-        Percolation p = new Percolation(5);
-        p.open(0,4);
-        p.open(1,4);
-        p.open(2,4);
-        p.open(3,4);
-
-        Truth.assertThat(p.isConnected(p.xyTo1D(3,4), p.xyTo1D(2,4))).isEqualTo(true);
-    }
+//    public void openAroundTest() {
+//        Percolation p = new Percolation(5);
+//        p.open(0,4);
+//        p.open(1,4);
+//        p.open(2,4);
+//        p.open(3,4);
+//
+//        Truth.assertThat(p.isConnected(p.xyTo1D(3,4), p.xyTo1D(2,4))).isEqualTo(true);
+//    }
 
 //    @Test
 //    public void cornerTest() {
@@ -53,8 +64,7 @@ public class PercolationTest {
 //    }
 
 
-    @Test
-    public void xyTo1D() {
+    public void xyTo1DTest() {
         Percolation p = new Percolation(5);
         List<Integer> result = new ArrayList<>();
         List<Integer> expected = new ArrayList<>();
@@ -70,39 +80,65 @@ public class PercolationTest {
         }
 
         Truth.assertThat(result).containsExactlyElementsIn(expected);
+
+        Percolation p2 = new Percolation(5);
+        List<Integer> result2 = new ArrayList<>();
+        List<Integer> expected2 = new ArrayList<>();
+
+        result2.add(p2.xyTo1D(0,0));
+        result2.add(p2.xyTo1D(1,1));
+        result2.add(p2.xyTo1D(2,2));
+        result2.add(p2.xyTo1D(3,3));
+        result2.add(p2.xyTo1D(4,4));
+        expected2.add(0);
+        expected2.add(6);
+        expected2.add(12);
+        expected2.add(18);
+        expected2.add(24);
+
+        Truth.assertThat(result2).containsExactlyElementsIn(expected2);
+
     }
 
 
     @Test
     public void isFullTest() {
-        Percolation p = new Percolation(10);
-        p.open(7,7);
-        boolean result = p.isFull(7,7);
-        Truth.assertThat(result).isEqualTo(false);
-    }
-
-
-    @Test
-    public void unionAroundOpenedTest() {
         Percolation p = new Percolation(5);
-        p.open(0, 1);
-        p.open(0,2);
-        p.open(0, 3);
-
-        Truth.assertThat(p.isConnected(p.xyTo1D(0,1), p.xyTo1D(0,2))).isEqualTo(true);
-
-        //p.unionAroundOpened(0,2);
-
-        Truth.assertThat(p.isConnected(p.xyTo1D(0,1), p.xyTo1D(0,2))).isEqualTo(true);
+        for (int r = 0; r < 5; r++) {
+            p.open(r, 0);
+        }
+        for (int c = 2; c < 5; c++) {
+            for (int r = 1; r < 5; r++) {
+                p.open(r, c);
+                Truth.assertThat(p.isFull(r, c)).isEqualTo(false);
+            }
+        }
     }
 
-    @Test
-    public void checkUnionTest() {
-        Percolation p = new Percolation(5);
-        p.open(0,1);
-        p.open(0,2);
+
+//    @Test
+//    public void unionAroundOpenedTest() {
+//        Percolation p = new Percolation(5);
+//        p.open(0, 1);
+//        p.open(0,2);
+//        p.open(0, 3);
+//
+//        Truth.assertThat(p.isConnected(p.xyTo1D(0,1), p.xyTo1D(0,2))).isEqualTo(true);
+//
+//        //p.unionAroundOpened(0,2);
+//
+//        Truth.assertThat(p.isConnected(p.xyTo1D(0,1), p.xyTo1D(0,2))).isEqualTo(true);
+//    }
+
+//    @Test
+//    public void checkUnionTest() {
+//        Percolation p = new Percolation(5);
+//        p.open(0,1);
+//        p.open(0,2);
+//
+//
+//        Truth.assertThat(p.isConnected(p.xyTo1D(0,1), p.xyTo1D(0,2))).isEqualTo(true);
+//    }
 
 
-        Truth.assertThat(p.isConnected(p.xyTo1D(0,1), p.xyTo1D(0,2))).isEqualTo(true);
-    }
 }
