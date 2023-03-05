@@ -99,16 +99,18 @@ public class BSTMap<K extends Comparable<K>,V> implements Map61B<K,V>{
                 if (node.left == null) {
                     node.left = new Node(key, value);
                     node.leaf = false;
+                    return true;
                 }
                 return insert(node.left, key, value); // insert to the left leaf
             } else if (node.key.compareTo(key) < 0) {   // insert to the right leaf
                 if (node.right == null) {
                     node.right = new Node(key, value);
                     node.leaf = false;
+                    return true;
                 }
                 return insert(node.right, key, value);
-            } else {
             }
+            return true;
         }
 
         public boolean contain(K key) {
@@ -143,7 +145,7 @@ public class BSTMap<K extends Comparable<K>,V> implements Map61B<K,V>{
     }
 
     public static void main(String[] args) {
-        System.out.println("hi2".compareTo("hi10"));
+        System.out.println("c".compareTo("d"));
     }
 
 
