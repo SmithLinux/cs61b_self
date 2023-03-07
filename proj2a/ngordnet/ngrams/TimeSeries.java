@@ -30,7 +30,7 @@ public class TimeSeries extends TreeMap<Integer, Double> {
     public TimeSeries(TimeSeries ts, int startYear, int endYear) {
         super();
         for (int i = startYear; i <= endYear; i++) {
-            if (ts.containsKey(i)) {
+            if (ts.get(i) != null) {
                 this.put(i, ts.get(i));
             }
         }
