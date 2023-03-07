@@ -41,4 +41,33 @@ public class TimeSeriesTest {
             assertThat(totalPopulation.data().get(i)).isWithin(1E-10).of(expectedTotal.get(i));
         }
     }
+
+    @Test
+    public void testDivideBy() {
+        TimeSeries catPopulation = new TimeSeries();
+        catPopulation.put(1992, 100.0);
+        catPopulation.put(1994, 200.0);
+
+        TimeSeries dogPopulation = new TimeSeries();
+        dogPopulation.put(1992, 400.0);
+        dogPopulation.put(1994, 400.0);
+
+        TimeSeries totalPopulation = catPopulation.dividedBy(dogPopulation);
+        // expected: 1992: 4.0
+        //           1994: 2.0
+
+        List<Integer> expectedYears = new ArrayList<>
+                (Arrays.asList(1992, 1994));
+
+        assertThat(totalPopulation.years()).isEqualTo(expectedYears);
+
+        List<Double> expectedTotal = new ArrayList<>
+                (Arrays.asList(4.0, 2.0));
+
+        assertThat(totalPopulation.years()).isEqualTo(expectedYears);
+
+        for (int i = 0; i < expectedTotal.size(); i += 1) {
+            assertThat(totalPopulation.data().get(i)).isWithin(1E-10).of(expectedTotal.get(i));
+        }
+    }
 } 
