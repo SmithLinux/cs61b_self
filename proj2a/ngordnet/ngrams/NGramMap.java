@@ -1,6 +1,10 @@
 package ngordnet.ngrams;
 
+import edu.princeton.cs.algs4.In;
+
 import java.util.Collection;
+import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * An object that provides utility methods for making queries on the
@@ -16,13 +20,23 @@ public class NGramMap {
 
     private static final int MIN_YEAR = 1400;
     private static final int MAX_YEAR = 2100;
-    // TODO: Add any necessary static/instance variables.
+
+    private final Map<String, TimeSeries> wordsMap;
+    private final TimeSeries counts;
 
     /**
      * Constructs an NGramMap from WORDSFILENAME and COUNTSFILENAME.
+     * words file
+     * 1. word 2. year 3. number of times that the word appeared 4.ignore
+     * counts file
+     * 1. year
+     * 2. the total number of words recorded from all texts that year
+     * 3.ignore the total number of pages of text from that year
+     * 4.ignore the total number of distinct sources from that year
      */
     public NGramMap(String wordsFilename, String countsFilename) {
-        // TODO: Fill in this constructor. See the "NGramMap Tips" section of the spec for help.
+        wordsMap = getSeparateWordsFile(new In(wordsFilename));
+        counts = getSeparateCountsFile(new In(countsFilename));
     }
 
     /**
@@ -32,8 +46,7 @@ public class NGramMap {
      * NGramMap. This is also known as a "defensive copy".
      */
     public TimeSeries countHistory(String word, int startYear, int endYear) {
-        // TODO: Fill in this method.
-        return null;
+        return new TimeSeries(wordsMap.get(word), startYear, endYear);
     }
 
     /**
@@ -43,16 +56,14 @@ public class NGramMap {
      * NGramMap. This is also known as a "defensive copy".
      */
     public TimeSeries countHistory(String word) {
-        // TODO: Fill in this method.
-        return null;
+        return new TimeSeries(wordsMap.get(word), MIN_YEAR, MAX_YEAR);
     }
 
     /**
      * Returns a defensive copy of the total number of words recorded per year in all volumes.
      */
     public TimeSeries totalCountHistory() {
-        // TODO: Fill in this method.
-        return null;
+        return counts;
     }
 
     /**
@@ -60,8 +71,10 @@ public class NGramMap {
      * and ENDYEAR, inclusive of both ends.
      */
     public TimeSeries weightHistory(String word, int startYear, int endYear) {
-        // TODO: Fill in this method.
-        return null;
+        TimeSeries wordsHistory = countHistory(word, startYear, endYear);
+        TimeSeries countsHistory = new TimeSeries(counts, startYear, endYear);
+
+        return wordsHistory.dividedBy(countsHistory);
     }
 
     /**
@@ -70,8 +83,20 @@ public class NGramMap {
      * TimeSeries.
      */
     public TimeSeries weightHistory(String word) {
-        // TODO: Fill in this method.
-        return null;
+        TimeSeries wordsHistory = countHistory(word);
+        int startYear = 0;
+        int endYear = 0;
+        for (Map.Entry<Integer, Double> entry : wordsHistory.entrySet()) {
+            if (startYear == 0) {
+                startYear = entry.getKey();
+                endYear = entry.getKey();
+            }
+            if (entry.getKey() > startYear) {
+                endYear = entry.getKey();
+            }
+        }
+        TimeSeries countsHistory = new TimeSeries(counts, startYear, endYear);
+        return wordsHistory.dividedBy(countsHistory);
     }
 
     /**
@@ -81,18 +106,69 @@ public class NGramMap {
      */
     public TimeSeries summedWeightHistory(Collection<String> words,
                                           int startYear, int endYear) {
-        // TODO: Fill in this method.
-        return null;
+
+        TimeSeries sumTS = new TimeSeries();
+        for (String word : words) {
+            boolean isExist = true;
+
+            for (int i = startYear; i <= endYear; i++) {
+                if (this.wordsMap.get(i) == null) {
+                    isExist = false;
+                }
+            }
+            if (isExist) {
+                sumTS = sumTS.plus(weightHistory(word, startYear, endYear));
+            }
+        }
+        return sumTS;
     }
 
     /**
      * Returns the summed relative frequency per year of all words in WORDS.
      */
     public TimeSeries summedWeightHistory(Collection<String> words) {
-        // TODO: Fill in this method.
-        return null;
+        TimeSeries sumTS = new TimeSeries();
+        for (String word : words) {
+            sumTS = sumTS.plus(weightHistory(word));
+        }
+        return sumTS;
     }
 
-    // TODO: Add any private helper methods.
-    // TODO: Remove all TODO comments before submitting.
+    private TimeSeries getSeparateCountsFile(In countsFile) {
+        String[] strs;
+        TimeSeries tm = new TimeSeries();
+
+        while (!countsFile.isEmpty()) {
+            strs = countsFile.readString().split(",", 3);
+            tm.put(Integer.valueOf(strs[0]), Double.valueOf(strs[1]));
+        }
+
+        return tm;
+    }
+
+    private Map<String, TimeSeries> getSeparateWordsFile(In wordsFile) {
+        Map<String, TimeSeries> map = new TreeMap<>();
+
+        String word;
+        int year;
+        double appeared;
+        TimeSeries tm = null;
+
+        while (!wordsFile.isEmpty()) {
+            word = wordsFile.readString();
+            year = wordsFile.readInt();
+            appeared = wordsFile.readDouble();
+
+            if (!map.containsKey(word)) {
+                tm = new TimeSeries();
+            }
+            
+            tm.put(year, appeared);
+            map.put(word, tm);
+            wordsFile.readInt();
+            
+        }
+
+        return map;
+    }
 }
