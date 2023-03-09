@@ -106,21 +106,12 @@ public class NGramMap {
      */
     public TimeSeries summedWeightHistory(Collection<String> words,
                                           int startYear, int endYear) {
-
-        TimeSeries sumTS = new TimeSeries();
+        TimeSeries ts = new TimeSeries();
         for (String word : words) {
-            boolean isExist = true;
-
-            for (int i = startYear; i <= endYear; i++) {
-                if (this.wordsMap.get(i) == null) {
-                    isExist = false;
-                }
-            }
-            if (isExist) {
-                sumTS = sumTS.plus(weightHistory(word, startYear, endYear));
-            }
+            ts = ts.plus(this.weightHistory(word, startYear, endYear));
         }
-        return sumTS;
+
+        return ts;
     }
 
     /**

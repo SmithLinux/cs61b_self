@@ -97,7 +97,7 @@ public class TimeSeries extends TreeMap<Integer, Double> {
             if (!newTS.containsKey(entry.getKey())) {
                 throw new IllegalArgumentException();
             }
-            newTS.put(entry.getKey(), entry.getValue() / newTS.get(entry.getKey()));
+            newTS.put(entry.getKey(), newTS.get(entry.getKey()) / entry.getValue());
         }
 
         return newTS;
