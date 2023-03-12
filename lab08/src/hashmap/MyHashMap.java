@@ -119,7 +119,7 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
         } else {
             if (this.containsKey(key)) {
                 for (Node item : bucket) {
-                    if (item.key == key) {
+                    if (item.key.equals(key)) {
                         item.value = value;
                     }
                 }
