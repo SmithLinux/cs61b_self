@@ -15,20 +15,21 @@ import java.util.*;
  * The key represent the number of the vertices, and the values represent the node which connected
  */
 public class Graph {
-    private final int[] ajList;
+    private Map<Integer, List<String>> adjList;
 
     /**
      * Create empty graph with 0 vertices.
      */
     public Graph() {
-        ajList = new int[5];
+        adjList = new HashMap<>();
     }
 
     public void addEdge(Integer vertices, String edge) {
-        
+        adjList.get(vertices).add(edge);
     }
 
     public void createNode(Integer vertices) {
+        adjList.put(vertices, new ArrayList<>());
     }
 
 
