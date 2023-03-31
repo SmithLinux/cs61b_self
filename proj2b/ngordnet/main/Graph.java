@@ -1,6 +1,8 @@
 package ngordnet.main;
 
 
+import org.checkerframework.checker.units.qual.A;
+
 import java.util.*;
 
 /**
@@ -14,8 +16,9 @@ import java.util.*;
  * 3
  * The key represent the number of the vertices, and the values represent the node which connected
  */
-public class Graph {
-    private Map<Integer, List<String>> adjList;
+public class Graph<V, W> {
+    private final Map<V, List<W>> adjList;
+    private int nodeSize;
 
     /**
      * Create empty graph with 0 vertices.
@@ -24,23 +27,39 @@ public class Graph {
         adjList = new HashMap<>();
     }
 
-    public void addEdge(Integer vertices, String edge) {
+    public boolean addEdge(V vertices, W edge) {
+        if (!hasNode(vertices)) {
+            return false;
+        }
         adjList.get(vertices).add(edge);
+        return true;
     }
 
-    public void createNode(Integer vertices) {
-        adjList.put(vertices, new ArrayList<>());
+    public boolean hasNode(V vertices) {
+        for (Map.Entry<V, List<W>> entry : adjList.entrySet()) {
+            if (vertices.equals(entry.getKey())) {
+                return true;
+            }
+        }
+        return false;
     }
 
-
-    /**
-     * return the number of edges.
-     */
-    public static int degree(Graph g, Integer vertices) {
-        return 0;
+    public void createNode(V vertices) {
+        if (!hasNode(vertices)) {
+            adjList.put(vertices, new ArrayList<>());
+        }
     }
 
-    public Integer getNode() {
-        return null;
+    public List<V> getNodes() {
+        List<V> list = new ArrayList<>();
+        for (Map.Entry<V, List<W>> entry : adjList.entrySet()) {
+            list.add(entry.getKey());
+        }
+
+        return list;
+    }
+
+    public List<W> neighbors(V node) {
+        return adjList.get(node);
     }
 }
