@@ -2,6 +2,8 @@ package ngordnet.main;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.Set;
+
 import static com.google.common.truth.Truth.assertThat;
 
 public class WordNetTest {
@@ -16,5 +18,11 @@ public class WordNetTest {
         assertThat(action).isEqualTo("action");
         assertThat(change).isEqualTo("change");
         assertThat(actifed).isEqualTo("actifed");
+    }
+
+    @Test
+    public void addHyponymsTest() {
+        WordNet wn=new WordNet("./data/wordnet/synsets11.txt","./data/wordnet/hyponyms11.txt");
+        assertThat(wn.getHyponyms("antihistamine")).isEqualTo(Set.of("antihistamine","actifed"));
     }
 }
