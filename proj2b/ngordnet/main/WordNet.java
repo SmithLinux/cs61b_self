@@ -1,6 +1,7 @@
 package ngordnet.main;
 
 import edu.princeton.cs.algs4.In;
+import org.checkerframework.checker.units.qual.A;
 
 import java.util.*;
 
@@ -14,7 +15,7 @@ import java.util.*;
 public class WordNet {
     // have instance of graph and add some helpful functions
     private Graph<Integer, Integer> graph;
-    private Map<Integer, String> synsets;
+    private Map<Integer, String[]> synsets;
     private String synsetsFileName;
     private String hyponymsFileName;
 
@@ -32,6 +33,10 @@ public class WordNet {
         addHyponyms();
     }
 
+    /**
+     * a synset element is not permitted to contain a space, split by "," and " ".
+     * create a graph node. and a synsets.
+     */
     public void addSynsets() {
         In in = new In(synsetsFileName);
 
@@ -39,16 +44,18 @@ public class WordNet {
         while (!in.isEmpty()) {
             String line = in.readLine();
             String[] synset = line.split(",");
-            synsets.put(Integer.valueOf(synset[0]), synset[1]);
+            int num = Integer.valueOf(synset[0]);
+            String words = synset[1];
+            synsets.put(num, words.split(" "));
             graph.createNode(Integer.valueOf(synset[0]));
         }
     }
 
-    public String getSynset(int node) {
+    public List<String> getSynset(int node) {
         if (!synsets.containsKey(node)) {
-            return "";
+            return null;
         }
-        return synsets.get(node);
+        return Arrays.asList(synsets.get(node));
     }
 
     private void addHyponyms() {
@@ -69,23 +76,44 @@ public class WordNet {
         }
     }
 
-    public Set<String> getHyponyms(String syn) {
-        Set<String> syns = new HashSet<>();
-        syns.add(syn);
-        int synIndex = getSynsetsIndex(syn);
-        for (int i : graph.neighbors(synIndex)) {
-            syns.add(synsets.get(i));
-        }
+    public List<String> getHyponyms(String syn) {
+        List<String> syns = new ArrayList<>();
 
+        int synIndex = getSynsetsIndex(syn);
+        List<Integer> hyps = BFTraversal(synIndex);
+        for (Integer i : hyps) {
+            for (String word : getSynset(i)) {
+                syns.add(word);
+            }
+        }
+        Collections.sort(syns);
         return syns;
     }
 
     private int getSynsetsIndex(String syn) {
-        for (Map.Entry<Integer, String> entry : synsets.entrySet()) {
-            if (syn.equals(entry.getValue())) {
-                return entry.getKey();
+        for (Map.Entry<Integer, String[]> entry : synsets.entrySet()) {
+            for (String word : entry.getValue()) {
+                if (syn.equals(word)) {
+                    return entry.getKey();
+                }
             }
         }
         return -1;
+    }
+
+    public List<Integer> BFTraversal(Integer vertices) {
+        Queue<Integer> queue = new ArrayDeque<>();
+        List<Integer> visited = new ArrayList<>();
+        queue.add(vertices);
+        while (!queue.isEmpty()) {
+            int frontOfQueue = queue.remove();
+            visited.add(frontOfQueue);
+            for (int i : graph.neighbors(frontOfQueue)) {
+                if (!visited.contains(i)) {
+                    queue.add(i);
+                }
+            }
+        }
+        return visited;
     }
 }
