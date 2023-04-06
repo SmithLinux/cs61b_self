@@ -33,6 +33,14 @@ public class WordNetTest {
         WordNet wn=new WordNet("./data/wordnet/synsets16.txt","./data/wordnet/hyponyms16.txt");
         assertThat(wn.getHyponyms("action")).containsExactly("action", "change", "demotion", "variation");
     }
+
+    @Test
+    public void addHyponymsTwoCommon16Test() {
+        WordNet wn=new WordNet("./data/wordnet/synsets16.txt","./data/wordnet/hyponyms16.txt");
+        String[] words = "alteration,change,demotion,increase,jump,leap,modification,saltation,transition,variation".split(",");
+        assertThat(wn.getHyponyms("change")).containsExactly(words);
+    }
+
     @Test
     public void handleListsOfWords16Test() {
         WordNet wn=new WordNet("./data/wordnet/synsets16.txt","./data/wordnet/hyponyms16.txt");
@@ -48,15 +56,23 @@ public class WordNetTest {
         List<String> list = new ArrayList<>();
         list.add("event");
         list.add("action");
-        assertThat(wn.getHyponyms(list)).containsExactly("jump", "leap", "saltation", "transition");
+        assertThat(wn.getHyponyms(list)).containsExactly("action", "change", "demotion", "variation");
     }
 
-//    @Test
-//    public void handleListsOfWordsTest() {
-//        WordNet wn=new WordNet("./data/wordnet/synsets.txt","./data/wordnet/hyponyms.txt");
-//        List<String> list = new ArrayList<>();
-//        list.add("video");
-//        list.add("recording");
-//        assertThat(wn.getHyponyms(list)).containsExactly("video", "video_recording", "videocassette", "videotape");
-//    }
+    @Test
+    public void handleListsOfWordsTest() {
+        WordNet wn=new WordNet("./data/wordnet/synsets.txt","./data/wordnet/hyponyms.txt");
+        List<String> list = new ArrayList<>();
+        list.add("video");
+        list.add("recording");
+        assertThat(wn.getHyponyms(list)).containsExactly("video", "video_recording", "videocassette", "videotape");
+    }
+
+    @Test
+    public void addHyponymsAllTest() {
+        WordNet wn=new WordNet("./data/wordnet/synsets.txt","./data/wordnet/hyponyms.txt");
+        String words = "HDTV,TV,cable,cable_television,high-definition_television,picture,telecasting,television,video,video_recording,videocassette,videotape";
+        String[] newStr = words.split(",");
+        assertThat(wn.getHyponyms("video")).containsExactly(newStr);
+    }
 }

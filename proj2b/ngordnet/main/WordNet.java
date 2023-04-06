@@ -55,6 +55,7 @@ public class WordNet {
         if (!synsets.containsKey(node)) {
             return null;
         }
+
         return Arrays.asList(synsets.get(node));
     }
 
@@ -79,16 +80,22 @@ public class WordNet {
     public List<String> getHyponyms(String syn) {
         List<String> syns = new ArrayList<>();
 
-        int synIndex = getSynsetsIndex(syn);
-        List<Integer> hyps = BFTraversal(synIndex);
-        if (hyps.isEmpty()) {
-            return new ArrayList<>();
+        List<Integer> synIndex = getSynsetsIndex(syn);
+        for (int index : synIndex) {
+            List<Integer> hyps = BFTraversal(index);
+            if (hyps.isEmpty()) {
+                return new ArrayList<>();
+            }
+            for (Integer i : hyps) {
+                syns.addAll(getSynset(i));
+            }
         }
-        for (Integer i : hyps) {
-            syns.addAll(getSynset(i));
-        }
-        Collections.sort(syns);
-        return syns;
+
+        Set<String> set = new HashSet<>(syns);
+        List<String> st = new ArrayList<>(set);
+
+        Collections.sort(st);
+        return st;
     }
 
     /**
@@ -99,50 +106,31 @@ public class WordNet {
      * return beetle
      */
     public List<String> getHyponyms(List<String> syn) {
-        Map<String, Integer> syns = new HashMap<>();
+        List<String> preHyn = getHyponyms(syn.get(0));;
 
         for (String word : syn) {
-            int synIndex = getSynsetsIndex(word);
-            List<Integer> hyps = BFTraversal(synIndex);
-            if (hyps.isEmpty()) {
-                return new ArrayList<>();
-            }
-            for (Integer i : hyps) {
-                for (String hyp : getSynset(i)) {
-                    if (!syns.containsKey(hyp)) {
-                        syns.put(hyp, 1);
-                    } else {
-                        syns.put(hyp, syns.get(hyp) + 1);
-                    }
-                }
-            }
+//            System.out.println(getHyponyms(word));
+            preHyn.retainAll(getHyponyms(word));
         }
-        List<String> commons = commonWords(syns);
-        Collections.sort(commons);
-        return commons;
+        Set<String> set = new HashSet<>(preHyn);
+        List<String> st = new ArrayList<>(set);
+        Collections.sort(st);
+        return st;
     }
 
-    public List<String> commonWords(Map<String, Integer> commonHpys) {
-        List<String> common = new ArrayList<>();
-
-        for (Map.Entry<String, Integer> entry : commonHpys.entrySet()) {
-            if (entry.getValue() > 1) {
-                common.add(entry.getKey());
-            }
-        }
-
-        return common;
-    }
-
-    private int getSynsetsIndex(String syn) {
+    /**
+     * return the list of the index which from the synsets.
+     */
+    private List<Integer> getSynsetsIndex(String syn) {
+        List<Integer> index = new ArrayList<>();
         for (Map.Entry<Integer, String[]> entry : synsets.entrySet()) {
             for (String word : entry.getValue()) {
-                if (syn.equals(word)) {
-                    return entry.getKey();
+                if (Arrays.asList(word.split(" ")).contains(syn)) {
+                    index.add(entry.getKey());
                 }
             }
         }
-        return -1;
+        return index;
     }
 
     public List<Integer> BFTraversal(Integer vertices) {
