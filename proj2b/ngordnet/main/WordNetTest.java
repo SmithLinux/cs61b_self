@@ -2,6 +2,7 @@ package ngordnet.main;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -32,4 +33,30 @@ public class WordNetTest {
         WordNet wn=new WordNet("./data/wordnet/synsets16.txt","./data/wordnet/hyponyms16.txt");
         assertThat(wn.getHyponyms("action")).containsExactly("action", "change", "demotion", "variation");
     }
+    @Test
+    public void handleListsOfWords16Test() {
+        WordNet wn=new WordNet("./data/wordnet/synsets16.txt","./data/wordnet/hyponyms16.txt");
+        List<String> list = new ArrayList<>();
+        list.add("change");
+        list.add("occurrence");
+        assertThat(wn.getHyponyms(list)).containsExactly("alteration", "change", "increase", "jump", "leap", "modification", "saltation", "transition");
+    }
+
+    @Test
+    public void handleListsOfWords1Test() {
+        WordNet wn=new WordNet("./data/wordnet/synsets16.txt","./data/wordnet/hyponyms16.txt");
+        List<String> list = new ArrayList<>();
+        list.add("event");
+        list.add("action");
+        assertThat(wn.getHyponyms(list)).containsExactly("jump", "leap", "saltation", "transition");
+    }
+
+//    @Test
+//    public void handleListsOfWordsTest() {
+//        WordNet wn=new WordNet("./data/wordnet/synsets.txt","./data/wordnet/hyponyms.txt");
+//        List<String> list = new ArrayList<>();
+//        list.add("video");
+//        list.add("recording");
+//        assertThat(wn.getHyponyms(list)).containsExactly("video", "video_recording", "videocassette", "videotape");
+//    }
 }

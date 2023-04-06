@@ -81,13 +81,57 @@ public class WordNet {
 
         int synIndex = getSynsetsIndex(syn);
         List<Integer> hyps = BFTraversal(synIndex);
+        if (hyps.isEmpty()) {
+            return new ArrayList<>();
+        }
         for (Integer i : hyps) {
-            for (String word : getSynset(i)) {
-                syns.add(word);
-            }
+            syns.addAll(getSynset(i));
         }
         Collections.sort(syns);
         return syns;
+    }
+
+    /**
+     * handle list of words, return a hyponyms of each word.
+     * get the hyponyms of both words.
+     * car - beetle, sedan
+     * bug - ant, beetle, gitbug
+     * return beetle
+     */
+    public List<String> getHyponyms(List<String> syn) {
+        Map<String, Integer> syns = new HashMap<>();
+
+        for (String word : syn) {
+            int synIndex = getSynsetsIndex(word);
+            List<Integer> hyps = BFTraversal(synIndex);
+            if (hyps.isEmpty()) {
+                return new ArrayList<>();
+            }
+            for (Integer i : hyps) {
+                for (String hyp : getSynset(i)) {
+                    if (!syns.containsKey(hyp)) {
+                        syns.put(hyp, 1);
+                    } else {
+                        syns.put(hyp, syns.get(hyp) + 1);
+                    }
+                }
+            }
+        }
+        List<String> commons = commonWords(syns);
+        Collections.sort(commons);
+        return commons;
+    }
+
+    public List<String> commonWords(Map<String, Integer> commonHpys) {
+        List<String> common = new ArrayList<>();
+
+        for (Map.Entry<String, Integer> entry : commonHpys.entrySet()) {
+            if (entry.getValue() > 1) {
+                common.add(entry.getKey());
+            }
+        }
+
+        return common;
     }
 
     private int getSynsetsIndex(String syn) {
