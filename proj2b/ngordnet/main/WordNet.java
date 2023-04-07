@@ -91,11 +91,11 @@ public class WordNet {
             }
         }
 
-        Set<String> set = new HashSet<>(syns);
-        List<String> st = new ArrayList<>(set);
+        //Set<String> set = new HashSet<>(syns);
+//        List<String> st = new ArrayList<>(set);
 
-        Collections.sort(st);
-        return st;
+//        Collections.sort(st);
+        return syns;
     }
 
     /**
@@ -109,13 +109,10 @@ public class WordNet {
         List<String> preHyn = getHyponyms(syn.get(0));;
 
         for (String word : syn) {
-//            System.out.println(getHyponyms(word));
             preHyn.retainAll(getHyponyms(word));
         }
-        Set<String> set = new HashSet<>(preHyn);
-        List<String> st = new ArrayList<>(set);
-        Collections.sort(st);
-        return st;
+//        Set<String> set = new HashSet<>(preHyn);
+        return preHyn;
     }
 
     /**

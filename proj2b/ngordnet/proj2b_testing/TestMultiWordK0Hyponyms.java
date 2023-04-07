@@ -32,6 +32,64 @@ public class TestMultiWordK0Hyponyms {
     }
 
     // TODO: Add more unit tests (including edge case tests) here.
+    @Test
+    public void testCommonK0() {
+        NgordnetQueryHandler studentHandler = AutograderBuddy.getHyponymHandler(
+                WORDS_FILE, TOTAL_COUNTS_FILE, SMALL_SYNSET_FILE, SMALL_HYPONYM_FILE);
+        List<String> words = List.of("change", "occurrence");
 
+        NgordnetQuery nq = new NgordnetQuery(words, 0, 0, 0);
+        String actual = studentHandler.handle(nq);
+        String expected = "[alteration, change, increase, jump, leap, modification, saltation, transition]";
+        assertThat(actual).isEqualTo(expected);
+    }
+
+    @Test
+    public void testCommon2K0() {
+        NgordnetQueryHandler studentHandler = AutograderBuddy.getHyponymHandler(
+                WORDS_FILE, TOTAL_COUNTS_FILE, SMALL_SYNSET_FILE, SMALL_HYPONYM_FILE);
+        List<String> words = List.of("event", "action");
+
+        NgordnetQuery nq = new NgordnetQuery(words, 0, 0, 0);
+        String actual = studentHandler.handle(nq);
+        String expected = "[action, change, demotion, variation]";
+        assertThat(actual).isEqualTo(expected);
+    }
     // TODO: Create similar unit test files for the k != 0 cases.
+
+    @Test
+    public void testVideoK5() {
+        NgordnetQueryHandler studentHandler = AutograderBuddy.getHyponymHandler(
+                WORDS_FILE, TOTAL_COUNTS_FILE, SMALL_SYNSET_FILE, SMALL_HYPONYM_FILE);
+        List<String> words = List.of("change", "occurrence");
+
+        NgordnetQuery nq = new NgordnetQuery(words, 0, 0, 5);
+        String actual = studentHandler.handle(nq);
+        String expected = "[alteration, change, increase, modification, transition]";
+        assertThat(actual).isEqualTo(expected);
+    }
+
+    @Test
+    public void testVideoK3() {
+        NgordnetQueryHandler studentHandler = AutograderBuddy.getHyponymHandler(
+                WORDS_FILE, TOTAL_COUNTS_FILE, SMALL_SYNSET_FILE, SMALL_HYPONYM_FILE);
+        List<String> words = List.of("change", "occurrence");
+
+        NgordnetQuery nq = new NgordnetQuery(words, 0, 0, 4);
+        String actual = studentHandler.handle(nq);
+        String expected = "[alteration, change, modification, transition]";
+        assertThat(actual).isEqualTo(expected);
+    }
+
+    @Test
+    public void testVideoK6() {
+        NgordnetQueryHandler studentHandler = AutograderBuddy.getHyponymHandler(
+                WORDS_FILE, TOTAL_COUNTS_FILE, SMALL_SYNSET_FILE, SMALL_HYPONYM_FILE);
+        List<String> words = List.of("change", "occurrence");
+
+        NgordnetQuery nq = new NgordnetQuery(words, 0, 0, 6);
+        String actual = studentHandler.handle(nq);
+        String expected = "[alteration, change, increase, leap, modification, transition]";
+        assertThat(actual).isEqualTo(expected);
+    }
 }
