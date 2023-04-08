@@ -89,7 +89,31 @@ public class TestMultiWordK0Hyponyms {
 
         NgordnetQuery nq = new NgordnetQuery(words, 0, 0, 6);
         String actual = studentHandler.handle(nq);
-        String expected = "[alteration, change, increase, leap, modification, transition]";
+        String expected = "[alteration, change, increase, jump, modification, transition]";
+        assertThat(actual).isEqualTo(expected);
+    }
+
+    @Test
+    public void testEmpty() {
+        NgordnetQueryHandler studentHandler = AutograderBuddy.getHyponymHandler(
+                WORDS_FILE, TOTAL_COUNTS_FILE, SMALL_SYNSET_FILE, SMALL_HYPONYM_FILE);
+        List<String> words = List.of("chan2ge", "occurre3nce");
+
+        NgordnetQuery nq = new NgordnetQuery(words, 0, 0, 6);
+        String actual = studentHandler.handle(nq);
+        String expected = "[]";
+        assertThat(actual).isEqualTo(expected);
+    }
+
+    @Test
+    public void testPopularity() {
+        NgordnetQueryHandler studentHandler = AutograderBuddy.getHyponymHandler(
+                WORDS_FILE, TOTAL_COUNTS_FILE, SMALL_SYNSET_FILE, SMALL_HYPONYM_FILE);
+        List<String> words = List.of("change", "occurrence");
+
+        NgordnetQuery nq = new NgordnetQuery(words, 1950, 1990, 2);
+        String actual = studentHandler.handle(nq);
+        String expected = "[]";
         assertThat(actual).isEqualTo(expected);
     }
 }
